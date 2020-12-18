@@ -16,7 +16,7 @@ public:
 	Sort(RenderWindow *);
 	void ran();
 	void bubSort();
-	void draw();
+	void draw(const char *);
 	void inserSort();
 	void selectSort();
 };
@@ -26,7 +26,7 @@ int main()
 	ContextSettings ctx;
 	ctx.antialiasingLevel = 16;
 	RenderWindow app(VideoMode(W, H), "Sorting algoritm", Style::Fullscreen, ctx);
-	app.setFramerateLimit(20);
+	app.setFramerateLimit(70);
 	Sort srt(&app);
 	while(app.isOpen())
 	{
@@ -41,15 +41,17 @@ int main()
 		}
 		app.clear(Color::Black);
 		srt.ran();
-		srt.draw();
+//		srt.draw("Random");
 		app.display();
 
 		app.clear(Color::Black);
-//		srt.bubSort();
-//		srt.ran();
-//		srt.inserSort();
-//		srt.ran();
+		srt.bubSort();
+		srt.ran();
+		srt.inserSort();
+		srt.ran();
+		app.setFramerateLimit(15);//Very fast sorting
 		srt.selectSort();
+		app.setFramerateLimit(70);//Very fast sorting
 	}
 	return 0;
 }
@@ -60,15 +62,23 @@ Sort::Sort(RenderWindow * _wnd):
 	shapes = new RectangleShape[elem];
 	for(int i=0; i<elem; i++)
 	{
-		shapes[i].setSize(Vector2f(1000, size));
+//		shapes[i].setSize(Vector2f(1000, size));
 		shapes[i].setFillColor(Color::Green);
 		shapes[i].setPosition(0,i*20);
 	}
 }
-void Sort::draw()
+void Sort::draw(const char *txt)
 {
+	Font font;
+	font.loadFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf");
+	Text text(txt, font, 50);
+	text.setPosition(1500,0);
+	text.setFillColor(Color::Red);
 	for(int i=0; i<elem; i++)
 		wnd->draw(shapes[i]);
+	wnd->draw(text);
+	if(Keyboard::isKeyPressed(Keyboard::Q))
+		wnd->close();
 }
 void Sort::ran()
 {
@@ -96,7 +106,7 @@ void Sort::bubSort()
 				shapes[j+1].setSize(Vector2f(temp, size));
 				shapes[j+1].setFillColor(Color::Blue);
 				wnd->clear(Color::Black);
-				draw();
+				draw("Bubles Sort");
 				wnd->display();
 				shapes[j+1].setFillColor(Color::Green);
 #ifdef optim
@@ -123,7 +133,7 @@ void Sort::inserSort()
 				shapes[j-1].setSize(Vector2f(temp, size));
 				shapes[j-1].setFillColor(Color::Blue);
 				wnd->clear(Color::Black);
-				draw();
+				draw("Insert Sort");
 				wnd->display();
 				shapes[j-1].setFillColor(Color::Green);
 
@@ -153,7 +163,7 @@ void Sort::selectSort()
 			shapes[min].setFillColor(Color::Yellow);
 			shapes[i].setFillColor(Color::Blue);
 			wnd->clear(Color::Black);
-			draw();
+			draw("Selection Sort");
 			wnd->display();
 			shapes[min].setFillColor(Color::Green);
 			shapes[i].setFillColor(Color::Green);
