@@ -45,10 +45,10 @@ int main()
 		app.display();
 
 		app.clear(Color::Black);
-		srt.bubSort();
-		srt.ran();
-		srt.inserSort();
-		srt.ran();
+//		srt.bubSort();
+//		srt.ran();
+//		srt.inserSort();
+//		srt.ran();
 		srt.selectSort();
 	}
 	return 0;
