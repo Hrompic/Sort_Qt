@@ -26,7 +26,7 @@ int main()
 	ContextSettings ctx;
 	ctx.antialiasingLevel = 16;
 	RenderWindow app(VideoMode(W, H), "Sorting algoritm", Style::Fullscreen, ctx);
-	app.setFramerateLimit(60);
+	app.setFramerateLimit(20);
 	Sort srt(&app);
 	while(app.isOpen())
 	{
@@ -46,8 +46,10 @@ int main()
 
 		app.clear(Color::Black);
 		srt.bubSort();
-//		srt.inserSort();
-		//srt.selectSort();
+		srt.ran();
+		srt.inserSort();
+		srt.ran();
+		srt.selectSort();
 	}
 	return 0;
 }
@@ -114,16 +116,16 @@ void Sort::inserSort()
 	{
 		for(int j=i; j>0; j--)
 		{
-			if(shapes[j].getSize().x<shapes[j+1].getSize().x)
+			if(shapes[j].getSize().x<shapes[j-1].getSize().x)
 			{
 				float temp = shapes[j].getSize().x;
-				shapes[j].setSize(Vector2f(shapes[j+1].getSize().x, size));
-				shapes[j+1].setSize(Vector2f(temp, size));
-				shapes[j+1].setFillColor(Color::Blue);
+				shapes[j].setSize(Vector2f(shapes[j-1].getSize().x, size));
+				shapes[j-1].setSize(Vector2f(temp, size));
+				shapes[j-1].setFillColor(Color::Blue);
 				wnd->clear(Color::Black);
 				draw();
 				wnd->display();
-				shapes[j+1].setFillColor(Color::Green);
+				shapes[j-1].setFillColor(Color::Green);
 
 			}
 			else
@@ -141,15 +143,20 @@ void Sort::selectSort()
 		{
 			if(shapes[j].getSize().x<shapes[min].getSize().x)
 				min = j;
+
+		}
+		if(i!=min)
+		{
 			float temp = shapes[i].getSize().x;
 			shapes[i].setSize(Vector2f(shapes[min].getSize().x, size));
 			shapes[min].setSize(Vector2f(temp, size));
-			shapes[min].setFillColor(Color::Blue);
-//			shapes[i].setFillColor(Color::Red);
+			shapes[min].setFillColor(Color::Yellow);
+			shapes[i].setFillColor(Color::Blue);
 			wnd->clear(Color::Black);
 			draw();
 			wnd->display();
 			shapes[min].setFillColor(Color::Green);
+			shapes[i].setFillColor(Color::Green);
 		}
 	}
 }
