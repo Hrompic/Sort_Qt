@@ -1,13 +1,17 @@
 #include <iostream>
+#include <android/log.h>
 #include <cstdlib>
 #include <SFML/Graphics.hpp>
 using namespace std;
 using namespace sf;
 #define W 1920
 #define H 1080
-#define elem 55
+#define elem 60
 #define size 15
 #define optim
+
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_INFO, "Mysfml", __VA_ARGS__))
+
 class Sort
 {
 	RectangleShape *shapes;
@@ -20,12 +24,13 @@ public:
 	void inserSort();
 	void selectSort();
 };
-int main()
+int main(int, char **)
 {
+	LOGE("started");
 	srand(time(NULL));
 	ContextSettings ctx;
 	ctx.antialiasingLevel = 16;
-	RenderWindow app(VideoMode(W, H), "Sorting algoritm", Style::Fullscreen, ctx);
+	RenderWindow app(VideoMode(VideoMode::getDesktopMode()), "Sorting algoritm", Style::Default);//, ctx);
 	app.setFramerateLimit(60);
 	Sort srt(&app);
 	while(app.isOpen())
@@ -39,12 +44,12 @@ int main()
 				if(event.key.code == Keyboard::Q)
 					app.close();
 		}
-		app.clear(Color::Black);
+	//	app.clear(Color::White);
 		srt.ran();
 		srt.draw();
 		app.display();
 
-		app.clear(Color::Black);
+//		app.clear(Color::Black);
 		srt.bubSort();
 //		srt.inserSort();
 		//srt.selectSort();
