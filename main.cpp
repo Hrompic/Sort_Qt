@@ -20,7 +20,7 @@ public:
 	Sort(RenderWindow *);
 	void ran();
 	void bubSort();
-	void draw();
+	void draw(const char *);
 	void inserSort();
 	void selectSort();
 };
@@ -31,7 +31,7 @@ int main(int, char **)
 	ContextSettings ctx;
 	ctx.antialiasingLevel = 16;
 	RenderWindow app(VideoMode(VideoMode::getDesktopMode()), "Sorting algoritm", Style::Default);//, ctx);
-	app.setFramerateLimit(60);
+	app.setFramerateLimit(70);
 	Sort srt(&app);
 	while(app.isOpen())
 	{
@@ -46,13 +46,17 @@ int main(int, char **)
 		}
 	//	app.clear(Color::White);
 		srt.ran();
-		srt.draw();
+//		srt.draw("Random");
 		app.display();
 
 //		app.clear(Color::Black);
 		srt.bubSort();
-//		srt.inserSort();
-		//srt.selectSort();
+		srt.ran();
+		srt.inserSort();
+		srt.ran();
+		app.setFramerateLimit(15);//Very fast sorting
+		srt.selectSort();
+		app.setFramerateLimit(70);//Very fast sorting
 	}
 	return 0;
 }
@@ -63,15 +67,24 @@ Sort::Sort(RenderWindow * _wnd):
 	shapes = new RectangleShape[elem];
 	for(int i=0; i<elem; i++)
 	{
-		shapes[i].setSize(Vector2f(1000, size));
+//		shapes[i].setSize(Vector2f(1000, size));
 		shapes[i].setFillColor(Color::Green);
 		shapes[i].setPosition(0,i*20);
 	}
 }
-void Sort::draw()
+void Sort::draw(const char *txt)
 {
+	Font font;
+//	font.loadFromFile("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf");
+	font.loadFromFile("/system/fonts/Roboto-Light.ttf");
+	Text text(txt, font, 50);
+	text.setPosition(1500,0);
+	text.setFillColor(Color::Red);
 	for(int i=0; i<elem; i++)
 		wnd->draw(shapes[i]);
+	wnd->draw(text);
+	if(Keyboard::isKeyPressed(Keyboard::Q))
+		wnd->close();
 }
 void Sort::ran()
 {
@@ -99,7 +112,7 @@ void Sort::bubSort()
 				shapes[j+1].setSize(Vector2f(temp, size));
 				shapes[j+1].setFillColor(Color::Blue);
 				wnd->clear(Color::Black);
-				draw();
+				draw("Bubles Sort");
 				wnd->display();
 				shapes[j+1].setFillColor(Color::Green);
 #ifdef optim
@@ -119,16 +132,16 @@ void Sort::inserSort()
 	{
 		for(int j=i; j>0; j--)
 		{
-			if(shapes[j].getSize().x<shapes[j+1].getSize().x)
+			if(shapes[j].getSize().x<shapes[j-1].getSize().x)
 			{
 				float temp = shapes[j].getSize().x;
-				shapes[j].setSize(Vector2f(shapes[j+1].getSize().x, size));
-				shapes[j+1].setSize(Vector2f(temp, size));
-				shapes[j+1].setFillColor(Color::Blue);
+				shapes[j].setSize(Vector2f(shapes[j-1].getSize().x, size));
+				shapes[j-1].setSize(Vector2f(temp, size));
+				shapes[j-1].setFillColor(Color::Blue);
 				wnd->clear(Color::Black);
-				draw();
+				draw("Insert Sort");
 				wnd->display();
-				shapes[j+1].setFillColor(Color::Green);
+				shapes[j-1].setFillColor(Color::Green);
 
 			}
 			else
@@ -146,15 +159,20 @@ void Sort::selectSort()
 		{
 			if(shapes[j].getSize().x<shapes[min].getSize().x)
 				min = j;
+
+		}
+		if(i!=min)
+		{
 			float temp = shapes[i].getSize().x;
 			shapes[i].setSize(Vector2f(shapes[min].getSize().x, size));
 			shapes[min].setSize(Vector2f(temp, size));
-			shapes[min].setFillColor(Color::Blue);
-//			shapes[i].setFillColor(Color::Red);
+			shapes[min].setFillColor(Color::Yellow);
+			shapes[i].setFillColor(Color::Blue);
 			wnd->clear(Color::Black);
-			draw();
+			draw("Selection Sort");
 			wnd->display();
 			shapes[min].setFillColor(Color::Green);
+			shapes[i].setFillColor(Color::Green);
 		}
 	}
 }
